@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = ">= 5.0"
     }
   }
@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias = "central_backup"
+  alias  = "central_backup"
   region = var.aws_region
   assume_role {
     role_arn = var.management_role

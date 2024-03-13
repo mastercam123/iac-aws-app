@@ -13,7 +13,7 @@ data "aws_availability_zones" "available" {
 
 ### Create S3 bucket for website
 resource "aws_s3_bucket" "web_bucket" {
-  bucket = var.bucket_name
+  bucket        = var.bucket_name
   force_destroy = true
 }
 
@@ -28,19 +28,19 @@ resource "aws_s3_bucket_website_configuration" "static_web" {
 }
 
 resource "aws_s3_bucket_public_access_block" "public_access_block" {
-  bucket = aws_s3_bucket.web_bucket.id
-  block_public_acls = false
-  block_public_policy = false
-  ignore_public_acls = false
+  bucket                  = aws_s3_bucket.web_bucket.id
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
   restrict_public_buckets = false
 }
 
 resource "aws_s3_object" "upload_object" {
-  for_each = fileset("html/", "*")
-  bucket = aws_s3_bucket.web_bucket.id
-  key = each.value
-  source = "html/${each.value}"
-  etag = filemd5("html/${each.value}")
+  for_each     = fileset("html/", "*")
+  bucket       = aws_s3_bucket.web_bucket.id
+  key          = each.value
+  source       = "html/${each.value}"
+  etag         = filemd5("html/${each.value}")
   content_type = "text/html"
 }
 
@@ -63,8 +63,8 @@ resource "aws_s3_bucket_policy" "static_bucket_policy" {
 
 data "aws_iam_policy_document" "allow_pub_access" {
   statement {
-    effect = "Allow"
-    actions = ["s3:GetObject"]
+    effect    = "Allow"
+    actions   = ["s3:GetObject"]
     resources = ["${aws_s3_bucket.web_bucket.arn}/*"]
   }
 }

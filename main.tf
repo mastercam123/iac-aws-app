@@ -59,6 +59,7 @@ resource "aws_s3_bucket_policy" "static_bucket_policy" {
       },
     ]
   })
+  depends_on = [ aws_s3_bucket.web_bucket ]
 }
 
 data "aws_iam_policy_document" "allow_pub_access" {

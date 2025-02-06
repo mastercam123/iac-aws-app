@@ -60,73 +60,71 @@
 ######
 
 
-# resource "aws_ebs_volume" "vol_1_member_account" {
-#   provider = aws.central_backup
-#   availability_zone = data.aws_availability_zones.available.names[0]
-#   size              = 1
-
-#   tags = {
-#     Name = "test_vol1"
-#   }
-# }
+resource "aws_ebs_volume" "vol_1_member_account" {
+  availability_zone = "eu-central-1a"
+  size              = 8
+  tags = {
+    Name = "test_vol1"
+  }
+}
 
 ##### Atlantis
-data "aws_secretsmanager_secret_version" "atlantis_github_token" {
-  secret_id = "GITHUB_TOKEN"
-}
-data "aws_ssm_parameter" "github_user" {
-  name = "GITHUB_USER"
-}
-data "aws_iam_role" "atlantis_task_role" {
-  name = "Atlantis-fargate-role"
-}
+# data "aws_secretsmanager_secret_version" "atlantis_github_token" {
+#   secret_id = "GITHUB_TOKEN"
+# }
+# data "aws_ssm_parameter" "github_user" {
+#   name = "GITHUB_USER"
+# }
+# data "aws_iam_role" "atlantis_task_role" {
+#   name = "Atlantis-fargate-role"
+# }
 
-module "atlantis" {
-  source  = "terraform-aws-modules/atlantis/aws"
+# module "atlantis" {
+#   source  = "terraform-aws-modules/atlantis/aws"
 
-  name = "atlantis"
+#   name = "atlantis"
 
-  # ECS Container Definition
-  atlantis = {
-    environment = [
-      {
-        name  = "ATLANTIS_GH_USER"
-        value = data.aws_ssm_parameter.github_user.value
-      },
-      {
-        name  = "ATLANTIS_REPO_ALLOWLIST"
-        value = "https://github.com/mastercam123/iac-aws-app"
-      },
-    ]
-    secrets = [
-      {
-        name      = "ATLANTIS_GH_TOKEN"
-        valueFrom = data.aws_secretsmanager_secret_version.secret_string
-      },
-      {
-        name      = "ATLANTIS_GH_WEBHOOK_SECRET"
-        valueFrom = "arn:aws:secretsmanager:eu-west-1:111122223333:secret:aes192-4D5e6F"
-      },
-    ]
-  }
+#   # ECS Container Definition
+#   atlantis = {
+#     environment = [
+#       {
+#         name  = "ATLANTIS_GH_USER"
+#         value = data.aws_ssm_parameter.github_user.value
+#       },
+#       {
+#         name  = "ATLANTIS_REPO_ALLOWLIST"
+#         value = "https://github.com/mastercam123/iac-aws-app"
+#       },
+#     ]
+#     secrets = [
+#       {
+#         name      = "ATLANTIS_GH_TOKEN"
+#         valueFrom = data.aws_secretsmanager_secret_version.secret_string
+#       },
+#       {
+#         name      = "ATLANTIS_GH_WEBHOOK_SECRET"
+#         valueFrom = "arn:aws:secretsmanager:eu-west-1:111122223333:secret:aes192-4D5e6F"
+#       },
+#     ]
+#   }
 
-  # ECS Service
-  service = {
-    # Provide Atlantis permission necessary to create/destroy resources
-    tasks_iam_role_policies = {
-      AdministratorAccess = "arn:aws:iam::aws:policy/AdministratorAccess"
-    }
-  }
-  service_subnets = ["subnet-089be39d7a382f5bf", "subnet-0fb6f411435ff2a8c", "subnet-01c82d3491e1dd670"]
-  vpc_id          = "vpc-091dd998ae50d2ffa"
+#   # ECS Service
+#   service = {
+#     # Provide Atlantis permission necessary to create/destroy resources
+#     tasks_iam_role_policies = {
+#       AdministratorAccess = "arn:aws:iam::aws:policy/AdministratorAccess"
+#     }
+#   }
+#   service_subnets = ["subnet-089be39d7a382f5bf", "subnet-0fb6f411435ff2a8c", "subnet-01c82d3491e1dd670"]
+#   vpc_id          = "vpc-091dd998ae50d2ffa"
 
-  # ALB
-  alb_subnets             = ["subnet-0ef537a8db928a348", "subnet-0836f518294aa2fe3", "subnet-0c9276b9d1237eb00"]
-  certificate_domain_name = "example.com"
-  route53_zone_id         = "Z2ES7B9AZ6SHAE"
+#   # ALB
+#   alb_subnets             = ["subnet-0ef537a8db928a348", "subnet-0836f518294aa2fe3", "subnet-0c9276b9d1237eb00"]
+#   certificate_domain_name = "example.com"
+#   route53_zone_id         = "Z2ES7B9AZ6SHAE"
 
-  tags = {
-    Environment = "dev"
-    Terraform   = "true"
-  }
-}
+#   tags = {
+#     Environment = "dev"
+#     Terraform   = "true"
+#   }
+# }

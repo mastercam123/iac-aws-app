@@ -60,7 +60,7 @@
 ######
 
 
-resource "aws_ebs_volume" "vol_1_member_account" {
+resource "aws_ebs_volume" "vol_test" {
   availability_zone = "eu-central-1a"
   size              = 8
   tags = {

@@ -1,61 +1,61 @@
-name: terraform deploy to aws
-on:
-    push:
-        branches: [main]
+# name: terraform deploy to aws
+# on:
+#     push:
+#         branches: [main]
 
-env:
-    AWS_REGION: ${{ vars.AWS_REGION }}
+# env:
+#     AWS_REGION: ${{ vars.AWS_REGION }}
 
-permissions:
-    id-token: write
-    contents: read
+# permissions:
+#     id-token: write
+#     contents: read
 
-jobs:
-    deploy-web:
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout
-          uses: actions/checkout@v3
+# jobs:
+#     deploy-web:
+#         runs-on: ubuntu-latest
+#         steps:
+#         - name: Checkout
+#           uses: actions/checkout@v3
 
-        - name: Print ref_name
-          run: |
-            echo "This is : ${{ github.ref_name }}"
+#         - name: Print ref_name
+#           run: |
+#             echo "This is : ${{ github.ref_name }}"
 
-        - name: Print Actor
-          run: |
-            echo "This is called by: ${{ github.actor }}"
+#         - name: Print Actor
+#           run: |
+#             echo "This is called by: ${{ github.actor }}"
 
-        - name: Configure AWS credentials from AWS account
-          uses: aws-actions/configure-aws-credentials@v2
-          with:
-            role-to-assume: ${{ vars.AWS_ROLE }}
-            aws-region: ${{ vars.AWS_REGION }}
-            role-session-name: GitHub-OIDC-TERRAFORM
+#         - name: Configure AWS credentials from AWS account
+#           uses: aws-actions/configure-aws-credentials@v2
+#           with:
+#             role-to-assume: ${{ vars.AWS_ROLE }}
+#             aws-region: ${{ vars.AWS_REGION }}
+#             role-session-name: GitHub-OIDC-TERRAFORM
 
-        - name: Setup Terraform with specified version on the runner
-          uses: hashicorp/setup-terraform@v2
-          with:
-            terraform_version: 1.7.0
+#         - name: Setup Terraform with specified version on the runner
+#           uses: hashicorp/setup-terraform@v2
+#           with:
+#             terraform_version: 1.7.0
 
-        - name: Terraform fmt
-          id: fmt
-          run: terraform fmt -check
-          continue-on-error: true
+#         - name: Terraform fmt
+#           id: fmt
+#           run: terraform fmt -check
+#           continue-on-error: true
 
-        - name: Terraform init
-          id: init
-          env:
-            AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-            AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
-          run: terraform init -backend-config="bucket=${AWS_BUCKET_NAME}" -backend-config="key=${AWS_BUCKET_KEY_NAME}" -backend-config="region=${AWS_REGION}"
+#         - name: Terraform init
+#           id: init
+#           env:
+#             AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+#             AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
+#           run: terraform init -backend-config="bucket=${AWS_BUCKET_NAME}" -backend-config="key=${AWS_BUCKET_KEY_NAME}" -backend-config="region=${AWS_REGION}"
 
-        - name: Terraform format
-          id: validate
-          run: terraform validate -no-color
+#         - name: Terraform format
+#           id: validate
+#           run: terraform validate -no-color
 
-        - name: Terraform plan
-          id: plan
-          run: terraform plan -no-color -input=false
+#         - name: Terraform plan
+#           id: plan
+#           run: terraform plan -no-color -input=false
 
         # - uses: actions/github-script@v6
         #   if: github.event_name == 'pull_request'
@@ -84,9 +84,9 @@ jobs:
         #         body: output
         #       })
 
-        - name: Terraform Plan Status
-          if: steps.plan.outcome == 'failure'
-          run: exit 1
+        # - name: Terraform Plan Status
+        #   if: steps.plan.outcome == 'failure'
+        #   run: exit 1
 
-        - name: Terraform Apply
-          run: terraform apply -auto-approve -input=false
+        # - name: Terraform Apply
+        #   run: terraform apply -auto-approve -input=false

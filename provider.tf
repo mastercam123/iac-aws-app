@@ -1,13 +1,15 @@
 terraform {
-  required_version = ">=1.0"
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = ">= 5.0"
     }
   }
-  backend "s3" {}
+  backend "s3" {
+    bucket = "tf-state-hsn-test2013"
+    key    = "atlantis-project/terraform.tfstate"
+    region = "eu-central-1"
+  }
 }
 
 provider "aws" {

@@ -1,5 +1,5 @@
-locals {
-  root_domain = "hsndevo3107.xyz"
-}
+# locals {
+#   root_domain = "hsndevo3107.xyz"
+# }
 
 

@@ -60,11 +60,11 @@
 ######
 
 
-resource "aws_ebs_volume" "vol_test" {
-  availability_zone = "eu-central-1b"
-  size              = 8
+resource "aws_ebs_volume" "vol_test_atlantis" {
+  availability_zone = "eu-central-1a"
+  size              = 10
   tags = {
-    Name = "test_vol1"
+    Name = "test_vol_atlantis"
   }
 }
 

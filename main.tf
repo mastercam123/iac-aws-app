@@ -62,7 +62,7 @@
 
 resource "aws_ebs_volume" "vol_test_atlantis" {
   availability_zone = "eu-central-1a"
-  size              = 10
+  size              = 12
   tags = {
     Name = "test_vol_atlantis"
   }

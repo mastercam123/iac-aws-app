@@ -76,6 +76,14 @@ resource "aws_ebs_volume" "vol_test_atlantis2" {
   }
 }
 
+resource "aws_ebs_volume" "vol_test_atlantis3" {
+  availability_zone = "eu-central-1a"
+  size              = 8
+  tags = {
+    Name = "test_vol_atlantis2"
+  }
+}
+
 ##### Atlantis
 # data "aws_secretsmanager_secret_version" "atlantis_github_token" {
 #   secret_id = "GITHUB_TOKEN"
